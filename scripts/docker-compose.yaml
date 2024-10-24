@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  master:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: talentiq-user
+      POSTGRES_PASSWORD: ItsPassTalentiq
+    volumes:
+      - ./master/data:/var/lib/postgresql/data
+      - ./master/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: always
+
+  slave:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: talentiq-user
+      POSTGRES_PASSWORD: ItsPassTalentiq
+      POSTGRES_MASTER_HOST: master
+      POSTGRES_MASTER_PORT: 5432
+    volumes:
+      - ./slave/data:/var/lib/postgresql/data
+    restart: always
